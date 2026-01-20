@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Ingreso Cowork</title>
+</head>
+<body>
+
+<h2 id="mensaje">Verificando ingreso...</h2>
+
+<script>
+  // 1. Función para leer cookies
+  function getCookie(nombre) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${nombre}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+    return null;
+  }
+
+  const usuarioId = getCookie("usuario_id");
+
+  // 2. Si NO existe cookie → redirigir al formulario
+  if (!usuarioId) {
+    window.location.href = "https://forms.gle/34sJi2yEQ8MLrLXS8";
+  } 
+  // 3. Si existe cookie → registrar visita
+  else {
+    // Llamada al backend / automatización
+    fetch("https://tu-backend.com/checkin", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        usuario_id: usuarioId
+      })
+    });
+
+    document.getElementById("mensaje").innerText =
+      "👋 Bienvenido de nuevo, tu visita fue registrada";
+  }
+</script>
+
+</body>
+</html>
